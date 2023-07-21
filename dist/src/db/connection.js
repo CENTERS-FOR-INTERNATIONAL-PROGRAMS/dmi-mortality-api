@@ -8,7 +8,7 @@ const config_1 = __importDefault(require("../../config"));
 const db = new sequelize_1.Sequelize(config_1.default.dbConfig.db, config_1.default.dbConfig.user, config_1.default.dbConfig.password, {
     host: config_1.default.dbConfig.host,
     port: config_1.default.dbConfig.port,
-    dialect: 'mssql',
+    dialect: 'mysql', //type of database
     dialectOptions: {
         requestTimeout: 30000,
         options: {

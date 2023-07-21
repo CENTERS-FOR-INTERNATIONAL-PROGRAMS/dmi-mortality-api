@@ -15,6 +15,6 @@ exports.default = {
         user: process.env.DB_USER || '<DB_USER>',
         password: process.env.DB_PASSWORD || '<DB_PASSWORD>',
         host: process.env.DB_HOST || '<DB_HOST>',
-        port: Number(process.env.DB_PORT) || 1433
+        port: Number(process.env.DB_PORT) || 3306
     }
 };

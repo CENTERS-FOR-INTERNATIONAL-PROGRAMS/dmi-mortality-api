@@ -1,1 +1,0 @@
-# dmi-mortality-api

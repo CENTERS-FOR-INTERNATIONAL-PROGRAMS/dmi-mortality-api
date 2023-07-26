@@ -1,5 +1,5 @@
 # dmi-mortality-api
-Mortality-api NodeJs Express
+ES6 structured Mortality-api with NodeJs Express
 
 # Install the necessary packages
 >npm install express cors sequelize mysql2

@@ -2,7 +2,9 @@
 ES6 structured Mortality-api with NodeJs Express
 
 # Install the necessary packages
->npm install express cors sequelize mysql2
+>tsc .
+>npm init
+>npm install express cors sequelize mssql dotenv
 
 # Initialize the API
 run the following in terminal

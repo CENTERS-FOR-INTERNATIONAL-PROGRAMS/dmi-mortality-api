@@ -7,14 +7,10 @@ interface IOverviewRepository {
   retrieveAll() : Promise<NumberEnrolled[]>  
 }
 
-
 class OverviewRepository implements IOverviewRepository {
 
  
     async retrieveAll(): Promise<NumberEnrolled[]> {
-      
-     
-      
         let condition = '';
         condition += 'and SampleTested is not null and barcode is not null Group by Facility';
         const bindings: any[] = [];

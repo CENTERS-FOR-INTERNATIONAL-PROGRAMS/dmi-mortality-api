@@ -5,5 +5,6 @@ export class NumberEnrolled extends Model {
   public id?: string;
   public enrolled?: number;
   public covid19Positive?: number;
+  public facility?: string;
 
 }

@@ -3,10 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
-    port: process.env.PORT || "8000",
-    apiPaths: {
-        tests: '/api/tests'
-    },
+    port: process.env.PORT || "8080",
+
     dbConfig: {
         db: process.env.DB || '<DB_NAME>',
         user: process.env.DB_USER || '<DB_USER>',

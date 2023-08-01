@@ -9,7 +9,7 @@ class OverviewRoutes {
     ///checking with leaon
     intializeRoutes() {
 
-        this.router.get("/findNumberEnrolled", this.controller.findNumberEnrolled);
+        this.router.get("/findNumberEnrolledByFacility", this.controller.findNumberEnrolledByFacility);
         this.router.get("/findCovid19ByAgeSex", this.controller.findCovid19ByAgeSex);
         this.router.get("/findCovid19OverTime", this.controller.findCovid19OverTime);
         this.router.get("/findCovidPositivity", this.controller.findCovid19Positivity);

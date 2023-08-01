@@ -1,7 +1,7 @@
 import { NumberEnrolled } from './../models/numberEnrolled.model';
 import sequlize from "../db/connection";
 
-import { Op, QueryTypes } from 'sequelize';
+import { QueryTypes } from 'sequelize';
 import { Covid19ByAgeSex } from '../models/covid19ByAgeSex.model';
 import { Covid19OverTime } from '../models/covid19overtime.model';
 import { Covid19PositivityRate } from '../models/covid19Positivity.model';
@@ -16,6 +16,19 @@ interface IOverviewRepository {
 
 class OverviewRepository implements IOverviewRepository {
     covid19OVerTime: any;
+    async retrieveNumberEnrolled(): Promise<NumberEnrolled[]> {
+        let condition = '';
+        condition += 'and SampleTested is not null and barcode is not null Group by Facility';
+        const bindings: any[] = [];
+        const query = `SELECT  newid() as Id, sum( SampleTested) as Enrolled, sum(Covid19Positive) 
+                        Covid19Positive,Facility  from [dbo].[FactMortality] 
+                        Where SampleTested = 1 ${condition};`
+        const [results, metadata] = await sequlize.query<NumberEnrolled[]>(query, {
+            type: QueryTypes.SELECT,
+        });
+        return results;
+    }
+  
     async retrieveCovid19ByAgeSex(): Promise<Covid19ByAgeSex[]> {
         let condition = '';
         condition += 'and SampleTested is not null and barcode is not null and AgeGroup is not null Group by AgeGroup,sex'
@@ -67,22 +80,8 @@ class OverviewRepository implements IOverviewRepository {
                   return results;
     }
 
-
-    async retrieveNumberEnrolled(): Promise<NumberEnrolled[]> {
-        let condition = '';
-        condition += 'and SampleTested is not null and barcode is not null Group by Facility';
-        const bindings: any[] = [];
-        const query = `SELECT  newid() as Id, sum( SampleTested) as Enrolled, sum(Covid19Positive) 
-                        Covid19Positive,Facility  from [dbo].[FactMortality] 
-                        Where SampleTested = 1 ${condition};`
-        const [results, metadata] = await sequlize.query<NumberEnrolled[]>(query, {
-            type: QueryTypes.SELECT,
-
-        });
-        console.log(results);
-        return results;
-
-    }
-
 }
+   
+
+
 export default new OverviewRepository

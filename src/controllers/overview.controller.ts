@@ -2,7 +2,7 @@
 
 import { Request, Response } from "express";
 import overviewRepository from "../repositories/overview.repository"
-import { Covid19OverTime } from "../models/covid19overtime.model";
+
 
 export default class OverviewController {
     

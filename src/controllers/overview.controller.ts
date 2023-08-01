@@ -1,16 +1,15 @@
-
-
-
 import { Request, Response } from "express";
 import overviewRepository from "../repositories/overview.repository"
-
+import { Covid19OverTime } from "../models/covid19overtime.model";
 
 export default class OverviewController {
 
     async findNumberEnrolled(req: Request, res: Response) {
         try{
 
+
             const numEnrolledAndPositive = await overviewRepository.retrieveNumberEnrolled();
+
 
             res.status(201).send(numEnrolledAndPositive); 
            

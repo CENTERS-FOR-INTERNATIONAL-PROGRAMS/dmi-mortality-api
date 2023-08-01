@@ -6,6 +6,11 @@ import { Covid19ByAgeSex } from '../models/covid19ByAgeSex.model';
 import { Covid19OverTime } from '../models/covid19overtime.model';
 import { Covid19PositivityRate } from '../models/covid19Positivity.model';
 
+import { Covid19ByAgeSex } from '../models/covid19ByAgeSex.model';
+import { Covid19OverTime } from '../models/covid19overtime.model';
+import { Covid19PositivityRate } from '../models/covid19Positivity.model';
+
+
 interface IOverviewRepository {
     retrieveNumberEnrolled(): Promise<NumberEnrolled[]>
     retrieveCovid19ByAgeSex(): Promise<Covid19ByAgeSex[]>
@@ -23,8 +28,10 @@ class OverviewRepository implements IOverviewRepository {
         const query = `SELECT  newid() as Id, sum( SampleTested) as Enrolled, sum(Covid19Positive) 
                         Covid19Positive,Facility  from [dbo].[FactMortality] 
                         Where SampleTested = 1 ${condition};`
+
         const [results, metadata] = await sequlize.query<NumberEnrolled[]>(query, {
             type: QueryTypes.SELECT,
+
         });
         return results;
     }

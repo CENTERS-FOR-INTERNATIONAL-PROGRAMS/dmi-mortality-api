@@ -26,6 +26,7 @@ class OverviewRepository implements IOverviewRepository {
      db = new Database();
 
     async retrieveNumberEnrolledByFacility(): Promise<NumberEnrolled[]> {
+       
         let condition = '';
         condition += 'and SampleTested is not null and barcode is not null Group by Facility';
         const bindings: any[] = [];
@@ -37,12 +38,10 @@ class OverviewRepository implements IOverviewRepository {
             type: QueryTypes.SELECT,
 
         });
-        console.log(this.numberEnrolled)
+     
         return this.numberEnrolled;
     }
   
-
-
     async retrieveCovid19ByAgeSex(): Promise<Covid19ByAgeSex[]> {
         let condition = '';
         condition += 'and SampleTested is not null and barcode is not null and AgeGroup is not null Group by AgeGroup,sex'
@@ -54,7 +53,7 @@ class OverviewRepository implements IOverviewRepository {
             type: QueryTypes.SELECT,
 
              });
-        console.log(this.covid19ByAgeSex);
+       
         return this.covid19ByAgeSex;
 
     }
@@ -74,7 +73,6 @@ class OverviewRepository implements IOverviewRepository {
 
         });
  
-        console.log( this.covid19OVerTime);
         return  this.covid19OVerTime; 
     }
     async retrieveCovid19Positivity(): Promise<Covid19PositivityRate[]> {
@@ -94,6 +92,4 @@ class OverviewRepository implements IOverviewRepository {
 
 }
    
-
-
 export default new OverviewRepository

@@ -8,7 +8,10 @@ class OverviewRoutes {
         this.intializeRoutes();
     }
     intializeRoutes() {
-        this.router.get("/", this.controller.findAll);
+        this.router.get("/findNumberEnrolled", this.controller.findNumberEnrolled);
+        this.router.get("/findCovid19ByAgeSex", this.controller.findCovid19ByAgeSex);
+        this.router.get("/findCovid19OverTime", this.controller.findCovid19OverTime);
+        this.router.get("/findCovidPositivity", this.controller.findCovid19Positivity);
 
     }
 

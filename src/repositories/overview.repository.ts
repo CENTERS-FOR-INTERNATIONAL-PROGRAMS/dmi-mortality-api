@@ -6,9 +6,7 @@ import { Covid19ByAgeSex } from '../models/covid19ByAgeSex.model';
 import { Covid19OverTime } from '../models/covid19overtime.model';
 import { Covid19PositivityRate } from '../models/covid19Positivity.model';
 
-import { Covid19ByAgeSex } from '../models/covid19ByAgeSex.model';
-import { Covid19OverTime } from '../models/covid19overtime.model';
-import { Covid19PositivityRate } from '../models/covid19Positivity.model';
+
 
 
 interface IOverviewRepository {

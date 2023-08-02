@@ -1,2 +1,23 @@
 npm run build
 npm run start
+
+Git
+----------------------------------------------
+git remote add upstream <repo url> 
+git remote -v (Check if you have the upstream)
+git fetch upstream (Fetch all branches)
+git status (Check difference between local and upstream)
+git checkout <branch> (Creates a branch in local)
+git merge upstream/<branch> (Merge upstream --> local)
+
+git stash <file> (Ignore file before pushing to remote)
+git status (Check for changes between local and upstream branch)
+git push (local --> remote)
+
+---
+git fetch upstream <branch> (Fetch all branches)
+git status
+git merge upstream/dev
+git push
+git pull
+---

@@ -1,10 +1,8 @@
 
-
-
 export const config = {
-  HOST: "4VHM2T3-KEN",
+  HOST: "localhost",
   USER: "sa",
-  PASSWORD: "Xkemricdc@123",
+  PASSWORD: "12345679",
   DB: "DMI_MortalityDW",
   DBPORT: 1433,
   pool: {

@@ -9,6 +9,5 @@ export default class Routes {
     app.use("/api", homeRoutes);
     app.use("/api/overview",overviewRoutes);
     app.use("/api/screening",screeningRoutes);
-    
   }
 }

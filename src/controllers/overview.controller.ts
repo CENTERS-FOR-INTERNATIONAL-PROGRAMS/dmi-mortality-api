@@ -66,5 +66,38 @@ export default class OverviewController {
 
         }
     }
+    async findCovid19PositivityByGender(req: Request, res: Response) {
+        try{
+
+            const covid19PositivityByGender = await overviewRepository.retrieveCovid19PositivityByGender();
+            res.status(201).send(covid19PositivityByGender); 
+           
+        }
+        catch(err) {
+            res.status(500).send ({
+               message: "Some Error occured while retrieving covid19PositivityByGender"
+
+
+            });
+
+        }
+    }
+
+    async findCovid19OverallPositivityByFacility(req: Request, res: Response) {
+        try{
+
+            const covid19PositivityByGender = await overviewRepository.retrieveCovid19OverallPositivityByFacility();
+            res.status(201).send(covid19PositivityByGender); 
+           
+        }
+        catch(err) {
+            res.status(500).send ({
+               message: "Some Error occured while retrieving covid19OverallPositivityByFacility"
+
+
+            });
+
+        }
+    }
 }
 

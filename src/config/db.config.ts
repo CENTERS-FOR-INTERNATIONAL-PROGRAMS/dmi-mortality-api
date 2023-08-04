@@ -1,6 +1,4 @@
 
-
-
 export const config = {
   HOST: "4VHM2T3-KEN",
   USER: "sa",

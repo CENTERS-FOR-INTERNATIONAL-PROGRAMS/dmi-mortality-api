@@ -79,7 +79,8 @@ export default class OverviewController {
             res.status(500).send({
                 message: "Some Error occured while retrieving covid19PositivityByAgeGender"
             });
-
+        }
+    }
     async findCovid19PositivityByGender(req: Request, res: Response) {
         try{
 

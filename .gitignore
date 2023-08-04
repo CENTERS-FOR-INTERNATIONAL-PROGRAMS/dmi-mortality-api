@@ -1,6 +1,6 @@
 build
 node_modules
 package-lock.json
-.cheats
 yarn.lock
 config/db.conf.ts
+.db.config.ts

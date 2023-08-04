@@ -1,8 +1,8 @@
 
 export const config = {
-  HOST: "localhost",
-  USER: "sa",
-  PASSWORD: "12345679",
+  HOST: "DESKTOP-PBR1Q9G\\SQLEXPRESS",
+  USER: "icap",
+  PASSWORD: "Icap2023#",
   DB: "DMI_MortalityDW",
   DBPORT: 1433,
   pool: {

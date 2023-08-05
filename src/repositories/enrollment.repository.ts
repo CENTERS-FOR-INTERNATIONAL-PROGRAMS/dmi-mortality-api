@@ -20,12 +20,11 @@ class EnrollmentRepository implements IEnrollmentRepository {
     private retrievedEnrollmentByEpiWeek: any;
 
     async retrieveEnrollmentByGender(): Promise<EnrollmentByGender[]> {
-        const query = `SELECT 
-           count(Screened) as Screened,
-          (Select sexValue from [dbo].[DimSex] where SexID = SEX) as Gender  
-            FROM [dbo].[FactMortality]
-            WHERE Screened = 1  
-             GROUP BY Sex`
+        const query = `SELECT   sum( SampleTested) as Enrolled,
+        (SELECT SexValue from [dbo].[DimSex] where SexId = sex) Gender
+        from [dbo].[FactMortality] 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null
+        Group by Sex`
         this.retrievedEnrollmentByGender = await this.db.sequelize?.query<EnrollmentByGender[]>(query, {
             type: QueryTypes.SELECT,
         });
@@ -35,12 +34,12 @@ class EnrollmentRepository implements IEnrollmentRepository {
     }
 
     async retrieveEnrollmentByAgeGender(): Promise<EnrollmentByAgeGender[]> {
-        const query = `SELECT 
-           count(Screened) as Screened,
-          (Select sexValue from [dbo].[DimSex] where SexID = SEX) as Gender  
-            FROM [dbo].[FactMortality]
-            WHERE Screened = 1  
-             GROUP BY Sex`
+        const query = `SELECT sum( SampleTested) as Enrolled,
+        (SELECT SexValue from [dbo].[DimSex] where SexId = sex) Gender,
+        (SELECT  AgeGroup from [dbo].[DimAgeGroup] where AgeGroupId = P.AgeGroup ) AgeGroup
+        from [dbo].[FactMortality]  P 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null
+        Group by Sex, AgeGroup`
         this.retrievedEnrollmentByAgeGender = await this.db.sequelize?.query<EnrollmentByAgeGender[]>(query, {
             type: QueryTypes.SELECT,
         });
@@ -50,12 +49,11 @@ class EnrollmentRepository implements IEnrollmentRepository {
     }
 
     async retrieveEnrollmentByFacility(): Promise<EnrollmentByFacility[]> {
-        const query = `SELECT 
-           count(Screened) as Screened,
-          (Select sexValue from [dbo].[DimSex] where SexID = SEX) as Gender  
-            FROM [dbo].[FactMortality]
-            WHERE Screened = 1  
-             GROUP BY Sex`
+        const query = `SELECT sum( SampleTested) as Enrolled,
+        (SELECT [FacilityName] From [dbo].[DimFacility] WHERE [FacilityId] = Facility) Facility
+        from [dbo].[FactMortality]  P 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null
+        Group by Facility`
         this.retrievedEnrollmentByFacility = await this.db.sequelize?.query<EnrollmentByFacility[]>(query, {
             type: QueryTypes.SELECT,
         });
@@ -66,11 +64,10 @@ class EnrollmentRepository implements IEnrollmentRepository {
 
     async retrieveEnrollmentByEpiWeek(): Promise<EnrollmentByEpiWeek[]> {
         const query = `SELECT 
-           count(Screened) as Screened,
-          (Select sexValue from [dbo].[DimSex] where SexID = SEX) as Gender  
-            FROM [dbo].[FactMortality]
-            WHERE Screened = 1  
-             GROUP BY Sex`
+        sum(SampleTested) as Enrolled, EpiWeek
+        FROM  [dbo].[FactMortality]  p
+        WHERE SampleTested = 1 and SampleTested is not null and barcode is not null
+        Group by EpiWeek;`
         this.retrievedEnrollmentByEpiWeek = await this.db.sequelize?.query<EnrollmentByEpiWeek[]>(query, {
             type: QueryTypes.SELECT,
         });

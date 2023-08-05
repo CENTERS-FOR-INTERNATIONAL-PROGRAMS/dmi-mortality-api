@@ -25,9 +25,9 @@ class OverviewRepository implements IOverviewRepository {
     covid19ByAgeSex: any;
     covidPositivityRate: any;
     covid19ScreenedByGenderAge: any;
-    covid19PositivityByGender : any;
-    covid19OverallPositivityByFacility : any;
-     db = new Database();
+    covid19PositivityByGender: any;
+    covid19OverallPositivityByFacility: any;
+    db = new Database();
 
 
     async retrieveNumberEnrolledByFacility(): Promise<NumberEnrolled[]> {
@@ -58,8 +58,6 @@ class OverviewRepository implements IOverviewRepository {
 
         });
         return this.covid19ByAgeSex;
-
-
     }
 
     async retrieveCovid19OverTime(): Promise<Covid19OverTime[]> {
@@ -101,19 +99,19 @@ class OverviewRepository implements IOverviewRepository {
 
     }
     async retrieveCovid19PositivityByGender(): Promise<Covid19PositivityByGender[]> {
- 
+
         const query = `select count(p.Covid19Positive) As PositiveNumber,
         (SELECT SexValue  FROM [dbo].[DimSex] where SexId = sex) as Gender 
         from [dbo].[FactMortality] p where Covid19Positive = 1 and 
         SampleTested = 1 and SampleTested is not null and barcode is not null
         group by Sex`
-            this.covid19PositivityByGender = await this.db.sequelize?.query<Covid19PositivityByGender[]>(query, {
+        this.covid19PositivityByGender = await this.db.sequelize?.query<Covid19PositivityByGender[]>(query, {
             type: QueryTypes.SELECT,
 
-             });
+        });
 
-              console.log(this.covid19PositivityByGender);
-            return this.covid19PositivityByGender;
+        console.log(this.covid19PositivityByGender);
+        return this.covid19PositivityByGender;
 
     }
     async retrieveCovid19OverallPositivityByFacility(): Promise<Covid19OverallPositivityByFacility[]> {
@@ -123,13 +121,13 @@ class OverviewRepository implements IOverviewRepository {
         WHERE Covid19Positive = 1 and 
         SampleTested = 1 and SampleTested is not null and barcode is not null
         GROUP BY Facility`
-            this.covid19OverallPositivityByFacility = await this.db.sequelize?.query<Covid19OverallPositivityByFacility[]>(query, {
+        this.covid19OverallPositivityByFacility = await this.db.sequelize?.query<Covid19OverallPositivityByFacility[]>(query, {
             type: QueryTypes.SELECT,
 
-             });
+        });
 
-              console.log(this.covid19OverallPositivityByFacility);
-            return this.covid19OverallPositivityByFacility;
+        console.log(this.covid19OverallPositivityByFacility);
+        return this.covid19OverallPositivityByFacility;
     }
 
     async retrieveCovid19PositivityByAgeGender(): Promise<Covid19PositivityByAgeGender[]> {

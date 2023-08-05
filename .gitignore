@@ -3,4 +3,5 @@ node_modules
 package-lock.json
 yarn.lock
 config/db.conf.ts
-.db.config.ts
+src/config/db.config.ts
+.cheats

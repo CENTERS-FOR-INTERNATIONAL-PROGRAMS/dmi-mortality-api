@@ -112,7 +112,6 @@ export default class OverviewController {
 
             });
 
-
         }
     }
 }

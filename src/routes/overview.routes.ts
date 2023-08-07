@@ -15,7 +15,7 @@ class OverviewRoutes {
         this.router.get("/findCovid19Positivity", this.controller.findCovid19Positivity);
         this.router.get("/findCovid19PositivityByGender", this.controller.findCovid19PositivityByGender);
         this.router.get("/findCovid19OverallPositivityByFacility", this.controller.findCovid19OverallPositivityByFacility);
-
+     
 
     }
 }

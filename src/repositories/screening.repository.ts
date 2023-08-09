@@ -21,11 +21,15 @@ class ScreeningRepository implements IScreeningRepository {
   private retrievedScreeningOverTime: any;
 
   async retrieveScreeningByGender(): Promise<ScreeningByGender[]> {
-    const query = `SELECT count(Screened) as Screened,
-    (Select sexValue from [dbo].[DimSex] where SexID = SEX) as Gender  
-    FROM [dbo].[FactMortality]
-    WHERE Screened = 1  
-     GROUP BY Sex`  //Query for ScreeningByGender Data
+    const query = `SELECT
+    SUM(CASE WHEN sex = '2' THEN Screened ELSE 0 END) AS Male_Screened,
+    SUM(CASE WHEN sex = '2' THEN Eligible ELSE 0 END) AS Male_Eligible,
+    SUM(CASE WHEN sex = '2' THEN Enrolled ELSE 0 END) AS Male_Enrolled,
+    SUM(CASE WHEN sex = '1' THEN Screened ELSE 0 END) AS Female_Screened,
+    SUM(CASE WHEN sex = '1' THEN Eligible ELSE 0 END) AS Female_Eligible,
+    SUM(CASE WHEN sex = '1' THEN Enrolled ELSE 0 END) AS Female_Enrolled
+    FROM
+    [dbo].[FactMortality]`  //Query for ScreeningByGender Data
     this.retrievedScreeningData = await this.db.sequelize?.query<ScreeningByGender[]>(query, {
       type: QueryTypes.SELECT,
     });
@@ -52,11 +56,12 @@ class ScreeningRepository implements IScreeningRepository {
 
   async retrieveScreeningByHealthFacilities(): Promise<ScreeningByHealthFacilities[]> {
     const query = `SELECT 
-    COUNT(Screened) AS Screened,
-    (SELECT [FacilityName] FROM [dbo].[DimFacility] WHERE FacilityId = p.Facility) Facility
-    FROM [dbo].[FactMortality] p
-    WHERE Screened = 1  
-    GROUP BY Facility` //Query for Screened Health Facilities
+    sum(Screened) Screened,
+    COUNT(SampleTested) Enrolled, SUM(Covid19Positive) Covid19Positive,
+      (SELECT FacilityName FRoM [dbo].[DimFacility] where FacilityId = Facility) Facility
+      FROM  [dbo].[FactMortality]  p
+      WHERE SampleTested = 1 and SampleTested is not null and barcode is not null
+      Group by Facility` //Query for Screened Health Facilities
     this.retrievedScreeningByHealthFacilities = await this.db.sequelize?.query<ScreeningByHealthFacilities[]>(query, {
       type: QueryTypes.SELECT,
     });
@@ -67,10 +72,12 @@ class ScreeningRepository implements IScreeningRepository {
 
   async retrieveScreeningOverTime(): Promise<screeningOverTime[]> {
     const query = `SELECT 
-    COUNT(Screened) AS Screened,
-    EpiWeek
-    FROM [dbo].[FactMortality] p
-    WHERE Screened = 1  
+    sum(Screened) Screened,
+    EpiWeek,
+    (SELECT  [Month] FROM  [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek )[Month],
+    (SELECT  [Year] FROM  [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Year]
+    FROM  [dbo].[FactMortality]  p
+    WHERE  SampleTested = 1 or Enrolled = 1 
     GROUP BY EpiWeek` //Query Screeened over time
     this.retrievedScreeningOverTime = await this.db.sequelize?.query<screeningOverTime[]>(query, {
       type: QueryTypes.SELECT,

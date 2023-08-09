@@ -1,5 +1,6 @@
 import { NumberEnrolled } from './../models/numberEnrolled.model';
 import { QueryTypes } from 'sequelize';
+import { Covid19Summary } from '../models/covid19Summary.model';
 import { Covid19ByAgeSex } from '../models/covid19ByAgeSex.model';
 import { Covid19OverTime } from '../models/covid19overtime.model';
 import { Covid19PositivityRate } from '../models/covid19Positivity.model';
@@ -9,17 +10,20 @@ import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPosi
 import Database from '../db';
 
 interface IOverviewRepository {
+    retrieveCovid19Summary(): Promise<Covid19Summary[]>
+    retrieveCovid19SummaryByMonth(): Promise<Covid19Summary[]>
     retrieveNumberEnrolledByFacility(): Promise<NumberEnrolled[]>
     retrieveCovid19ByAgeSex(): Promise<Covid19ByAgeSex[]>
     retrieveCovid19OverTime(): Promise<Covid19OverTime[]>
     retrieveCovid19Positivity(): Promise<Covid19PositivityRate[]>
     retrieveCovid19PositivityByGender(): Promise<Covid19PositivityByGender[]>
     retrieveCovid19OverallPositivityByFacility(): Promise<Covid19OverallPositivityByFacility[]>
-
 }
 
 class OverviewRepository implements IOverviewRepository {
-    covid19OVerTime: any;
+    covid19Summary: any;
+    covid19SummaryByMonth: any;
+    covid19OverTime: any;
 
     numberEnrolled: any;
     covid19ByAgeSex: any;
@@ -29,6 +33,137 @@ class OverviewRepository implements IOverviewRepository {
     covid19OverallPositivityByFacility: any;
     db = new Database();
 
+    async retrieveCovid19Summary(): Promise<Covid19Summary[]> {
+        const query = `--Total Screened
+        SELECT TotalScreened, Eligible, 
+        CAST((Eligible * 100.0 / NULLIF(TotalScreened, 0))AS INT)  PercentEligible,
+        Enrolled, 
+        CAST((Enrolled * 100.0 / NULLIF(Eligible, 0))AS INT)  PercentEnrolled,
+        Tested,
+        CAST(( Tested* 100.0 / NULLIF(enrolled, 0))AS INT)  PercentTested,
+        Positive,
+        CAST(( Positive* 100.0 / NULLIF(Tested, 0))AS INT)  PercentPositive
+        FROM (
+        SELECT  
+        (SELECT COUNT(Screened) 
+        FROM [dbo].[FactMortality] p
+        WHERE Screened = 1 ) AS TotalScreened ,
+         --eligible
+        (SELECT Count(Eligible) Eligible FROM [dbo].[FactMortality] p
+        WHERE Eligible = 1) as Eligible,
+        ---Enrolled  
+        (SELECT   sum( SampleTested)  
+        from [dbo].[FactMortality] 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null ) AS Enrolled,
+
+         ---TEsted
+        (SELECT   sum( SampleTested) 
+        from [dbo].[FactMortality] 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null ) AS Tested ,
+        ---Postive
+        (SELECT 
+                sum(Covid19Positive) Positive      
+                FROM  [dbo].[FactMortality]  p
+                WHERE SampleTested = 1 and SampleTested is not null and barcode is not null ) AS Positive
+        ) A`
+
+        this.covid19Summary = await this.db.sequelize?.query<Covid19Summary[]>(query, {
+            type: QueryTypes.SELECT,
+        });
+
+        console.log(this.covid19Summary);
+        return this.covid19Summary;
+    }
+
+    async retrieveCovid19SummaryByMonth(): Promise<Covid19Summary[]> {
+        const query =
+            `DECLARE @CurrentMonth INT;
+        DECLARE @CurrentYear INT;
+        DECLARE @LastDayOfPreviousMonth  INT;
+        
+        SET @CurrentMonth = MONTH(getdate()) - 1;
+        SET @CurrentYear = YEAR(getdate());
+        SET @LastDayOfPreviousMonth = DAY(EOMONTH(GETDATE())) 
+        DECLARE @PreviousMonthLastDateIdInString VARCHAR(10);
+        DECLARE @PreviousMonthLastDateIdInINT INT;
+        
+        SET @PreviousMonthLastDateIdInString = CAST(@CurrentYear AS VARCHAR)
+        + 
+        CASE WHEN @CurrentMonth < 10 THEN 
+        +'0'+
+        CAST(@CurrentMonth AS VARCHAR)
+        ELSE
+        CAST(@CurrentMonth AS VARCHAR)
+        END
+            
+        + CAST(@LastDayOfPreviousMonth AS VARCHAR);
+        
+        
+        SET @PreviousMonthLastDateIdInINT =   CAST(@PreviousMonthLastDateIdInString AS INT)
+        
+        
+        SELECT TotalScreened,TotalScreenedLastMonth, Eligible,EligibleLastMonth, 
+        
+        
+        Enrolled,EnrolledLastMonth, 
+        
+        Tested,TestedLastMonth,
+        
+        Positive,PositiveLastMonth
+        
+        FROM (
+        SELECT  
+        (SELECT COUNT(Screened) 
+        FROM [dbo].[FactMortality] p
+        WHERE Screened = 1  ) AS TotalScreened,
+        (SELECT COUNT(Screened) 
+        FROM [dbo].[FactMortality] p
+        WHERE Screened = 1 and ReviewDate <= @PreviousMonthLastDateIdInINT  and ReviewDate is not null ) AS TotalScreenedLastMonth ,
+         --eligible
+        
+         (SELECT Count(Eligible) Eligible FROM [dbo].[FactMortality] p
+        WHERE Eligible = 1 ) as Eligible,
+        (SELECT Count(Eligible) Eligible FROM [dbo].[FactMortality] p
+        WHERE Eligible = 1 and ReviewDate <= @PreviousMonthLastDateIdInINT and ReviewDate is not null) as EligibleLastMonth,
+        ---Enrolled  
+        (SELECT   sum( Enrolled)  
+        from [dbo].[FactMortality] 
+        Where Enrolled = 1 and Enrolled is not null and barcode is not null) AS Enrolled,
+        
+        (SELECT   sum( Enrolled)  
+        from [dbo].[FactMortality] 
+        Where Enrolled = 1 and Enrolled is not null and barcode is not null
+        and ReviewDate <= @PreviousMonthLastDateIdInINT and ReviewDate is not null ) AS EnrolledLastMonth,
+        
+         ---TEsted
+        
+         (SELECT   sum( SampleTested) 
+        from [dbo].[FactMortality] 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null) AS Tested,
+        (SELECT   sum( SampleTested) 
+        from [dbo].[FactMortality] 
+        Where SampleTested = 1 and SampleTested is not null and barcode is not null
+        and ReviewDate <= @PreviousMonthLastDateIdInINT and ReviewDate is not null ) AS TestedLastMonth ,
+        ---Postive
+        
+        (SELECT 
+                sum(Covid19Positive) Positive      
+                FROM  [dbo].[FactMortality]  p
+                WHERE SampleTested = 1 and SampleTested is not null and barcode is not null
+                ) AS Positive,
+        (SELECT 
+                sum(Covid19Positive) Positive      
+                FROM  [dbo].[FactMortality]  p
+                WHERE SampleTested = 1 and SampleTested is not null and barcode is not null
+                and ReviewDate <= @PreviousMonthLastDateIdInINT and ReviewDate is not null) AS PositiveLastMonth
+        ) A`
+
+        this.covid19SummaryByMonth = await this.db.sequelize?.query<Covid19PositivityByAgeGender[]>(query, {
+            type: QueryTypes.SELECT,
+        });
+
+        return this.covid19SummaryByMonth;
+    }
 
     async retrieveNumberEnrolledByFacility(): Promise<NumberEnrolled[]> {
         let condition = '';
@@ -72,14 +207,14 @@ class OverviewRepository implements IOverviewRepository {
         FROM  [dbo].[FactMortality]  p
         WHERE SampleTested = 1 ${condition}
         Group by EpiWeek;`
-        this.covid19OVerTime = await this.db.sequelize?.query<Covid19OverTime[]>(query, {
+        this.covid19OverTime = await this.db.sequelize?.query<Covid19OverTime[]>(query, {
             type: QueryTypes.SELECT,
 
         });
 
-        console.log(this.covid19OVerTime);
+        console.log(this.covid19OverTime);
 
-        return this.covid19OVerTime;
+        return this.covid19OverTime;
     }
 
     async retrieveCovid19Positivity(): Promise<Covid19PositivityRate[]> {

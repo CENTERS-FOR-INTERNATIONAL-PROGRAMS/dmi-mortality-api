@@ -2,6 +2,29 @@ import { Request, Response } from "express";
 import overviewRepository from "../repositories/overview.repository"
 
 export default class OverviewController {
+    async findCovid19Summary(req: Request, res: Response) {
+        try {
+            const numCovid19Summary = await overviewRepository.retrieveCovid19Summary();
+            res.status(201).send(numCovid19Summary);
+        }
+        catch (err) {
+            res.status(500).send({
+                message: "Some Error occured while retrieving numCovid19Summary"
+            });
+        }
+    }
+
+    async findCovid19SummaryByMonth(req: Request, res: Response) {
+        try {
+            const numCovid19SummaryByMonth = await overviewRepository.retrieveCovid19SummaryByMonth();
+            res.status(201).send(numCovid19SummaryByMonth);
+        }
+        catch (err) {
+            res.status(500).send({
+                message: "Some Error occured while retrieving numCovid19SummaryByMonth"
+            });
+        }
+    }
 
     async findNumberEnrolledByFacility(req: Request, res: Response) {
         try {
@@ -69,7 +92,6 @@ export default class OverviewController {
         }
     }
 
-
     async findCovid19PositivityByAgeGender(req: Request, res: Response) {
         try {
             const covid19PositivityByAgeGender = await overviewRepository.retrieveCovid19PositivityByAgeGender();
@@ -82,15 +104,15 @@ export default class OverviewController {
         }
     }
     async findCovid19PositivityByGender(req: Request, res: Response) {
-        try{
+        try {
 
             const covid19PositivityByGender = await overviewRepository.retrieveCovid19PositivityByGender();
-            res.status(201).send(covid19PositivityByGender); 
-           
+            res.status(201).send(covid19PositivityByGender);
+
         }
-        catch(err) {
-            res.status(500).send ({
-               message: "Some Error occured while retrieving covid19PositivityByGender"
+        catch (err) {
+            res.status(500).send({
+                message: "Some Error occured while retrieving covid19PositivityByGender"
 
 
             });
@@ -99,15 +121,15 @@ export default class OverviewController {
     }
 
     async findCovid19OverallPositivityByFacility(req: Request, res: Response) {
-        try{
+        try {
 
             const covid19PositivityByGender = await overviewRepository.retrieveCovid19OverallPositivityByFacility();
-            res.status(201).send(covid19PositivityByGender); 
-           
+            res.status(201).send(covid19PositivityByGender);
+
         }
-        catch(err) {
-            res.status(500).send ({
-               message: "Some Error occured while retrieving covid19OverallPositivityByFacility"
+        catch (err) {
+            res.status(500).send({
+                message: "Some Error occured while retrieving covid19OverallPositivityByFacility"
 
 
             });

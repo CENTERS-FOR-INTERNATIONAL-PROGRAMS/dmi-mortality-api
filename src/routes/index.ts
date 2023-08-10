@@ -4,6 +4,7 @@ import homeRoutes from "./home.routes";
 import overviewRoutes from "./overview.routes";
 import screeningRoutes from "./screening.route";
 
+import covid19ScreeningRoutes from "./covid19/screening.route";
 import covid19EnrollmentRoutes from "./covid19/enrollment.route";
 import covid19ResultsRoutes from "./covid19/results.route";
 
@@ -13,6 +14,7 @@ export default class Routes {
     app.use("/api/overview", overviewRoutes);
     app.use("/api/screening", screeningRoutes);
 
+    app.use("/api/covid19/screening", covid19ScreeningRoutes);
     app.use("/api/covid19/enrollment", covid19EnrollmentRoutes);
     app.use("/api/covid19/results", covid19ResultsRoutes);
 

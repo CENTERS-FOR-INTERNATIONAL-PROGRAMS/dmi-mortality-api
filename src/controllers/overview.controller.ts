@@ -26,6 +26,18 @@ export default class OverviewController {
         }
     }
 
+    async findCovid19ScreeningEnrollmentCascade(req: Request, res: Response) {
+        try {
+            const numCovid19ScreeningEnrolmentCascade = await overviewRepository.retrieveCovid19ScreeningEnrollmentCascade();
+            res.status(201).send(numCovid19ScreeningEnrolmentCascade);
+        }
+        catch (err) {
+            res.status(500).send({
+                message: "Some Error occured while retrieving numCovid19SummaryByMonth"
+            });
+        }
+    }
+
     async findNumberEnrolledByFacility(req: Request, res: Response) {
         try {
 
@@ -137,4 +149,3 @@ export default class OverviewController {
         }
     }
 }
-

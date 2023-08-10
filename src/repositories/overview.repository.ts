@@ -233,13 +233,15 @@ class OverviewRepository implements IOverviewRepository {
         return this.covidPositivityRate;
 
     }
+
     async retrieveCovid19PositivityByGender(): Promise<Covid19PositivityByGender[]> {
 
-        const query = `select count(p.Covid19Positive) As PositiveNumber,
-        (SELECT SexValue  FROM [dbo].[DimSex] where SexId = sex) as Gender 
-        from [dbo].[FactMortality] p where Covid19Positive = 1 and 
-        SampleTested = 1 and SampleTested is not null and barcode is not null
-        group by Sex`
+        const query = `SELECT COUNT(enrolled) EnrolledNumber, count(SampleTested) TestedNumber,
+        SUM(Covid19Positive) Covid19Positive,
+          (SELECT SexValue FRoM [dbo].[DimSex] where SexId = sex) Gender
+          FROM  [dbo].[FactMortality]  p
+          WHERE SampleTested = 1 and SampleTested is not null and barcode is not null
+          Group by Sex`
         this.covid19PositivityByGender = await this.db.sequelize?.query<Covid19PositivityByGender[]>(query, {
             type: QueryTypes.SELECT,
 
@@ -249,13 +251,13 @@ class OverviewRepository implements IOverviewRepository {
         return this.covid19PositivityByGender;
 
     }
+
     async retrieveCovid19OverallPositivityByFacility(): Promise<Covid19OverallPositivityByFacility[]> {
-        const query = `SELECT COUNT(p.Covid19Positive) As PositiveNumber,
-        (SELECT FacilityNAme FROM [dbo].[DimFacility] WHERE FacilityId = Facility) Facility
-        FROM [dbo].[FactMortality] p 
-        WHERE Covid19Positive = 1 and 
-        SampleTested = 1 and SampleTested is not null and barcode is not null
-        GROUP BY Facility`
+        const query = `SELECT  count(SampleTested) EnrolledNumber, sum(Covid19Positive) Covid19Positive,
+        (SELECT FacilityName FRoM [dbo].[DimFacility] where FacilityId = Facility) Facility
+        FROM  [dbo].[FactMortality]  p
+        WHERE SampleTested = 1 and SampleTested is not null and barcode is not null
+        Group by Facility`
         this.covid19OverallPositivityByFacility = await this.db.sequelize?.query<Covid19OverallPositivityByFacility[]>(query, {
             type: QueryTypes.SELECT,
 

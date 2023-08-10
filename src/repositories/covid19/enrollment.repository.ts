@@ -32,11 +32,11 @@ class EnrollmentRepository implements IEnrollmentRepository {
     }
 
     async retrieveByAgeGender(): Promise<Covid19Enrollment[]> {
-        const query = `SELECT sum( SampleTested) as EnrolledNumber,
+        const query = `SELECT sum( enrolled) as EnrolledNumber,
         (SELECT SexValue from [dbo].[DimSex] where SexId = sex) Gender,
         (SELECT  AgeGroup from [dbo].[DimAgeGroup] where AgeGroupId = P.AgeGroup ) AgeGroup
         from [dbo].[FactMortality]  P 
-        Where SampleTested = 1 and SampleTested is not null and barcode is not null
+        Where enrolled = 1 
         Group by Sex, AgeGroup`
         this.retrievedData = await this.db.sequelize?.query<Covid19Enrollment[]>(query, {
             type: QueryTypes.SELECT,
@@ -61,14 +61,11 @@ class EnrollmentRepository implements IEnrollmentRepository {
     }
 
     async retrieveOverTime(): Promise<Covid19Enrollment[]> {
-        const query = `SELECT 
-        sum(Eligible) ElligibleNumber, 
-        sum(SampleTested) EnrolledNumber,
-        EpiWeek,
+        const query = `SELECT sum(Eligible) ElligibleNumber, sum(enrolled) EnrolledNumber, EpiWeek,
         (SELECT  [Month] FROM  [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek )[Month],
         (SELECT  [Year] FROM  [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Year]
         FROM  [dbo].[FactMortality]  p
-        WHERE  SampleTested = 1 or Enrolled = 1 
+        WHERE  eligible = 1 or Enrolled = 1 
         GROUP BY EpiWeek;`
         this.retrievedData = await this.db.sequelize?.query<Covid19Enrollment[]>(query, {
             type: QueryTypes.SELECT,

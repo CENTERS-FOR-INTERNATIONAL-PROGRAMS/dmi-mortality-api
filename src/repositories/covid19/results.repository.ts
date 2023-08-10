@@ -63,7 +63,7 @@ WHere Enrolled = 1`
     async retrieveByPositivityOverTime(): Promise<Covid19Results[]> {
         const query = `SELECT 
         count(SampleTested) SampleTested, 
-        sum(Covid19Positive) CovidPositive,
+        sum(Covid19Positive) Covid19Positive,
         EpiWeek,
         (select  [Month] from [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Month],
         (select  [Year] from [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Year]

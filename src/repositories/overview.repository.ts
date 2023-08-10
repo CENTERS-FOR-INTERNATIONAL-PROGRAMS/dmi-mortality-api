@@ -7,6 +7,7 @@ import { Covid19PositivityRate } from '../models/covid19Positivity.model';
 import { Covid19PositivityByAgeGender } from '../models/covid19PositivityByAgeGender.model';
 import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
+import { Covid19EnrollmentScreeningCascade } from '../models/covid19EnrollmentScreeningCascade.model';
 import Database from '../db';
 
 interface IOverviewRepository {
@@ -24,6 +25,7 @@ class OverviewRepository implements IOverviewRepository {
     covid19Summary: any;
     covid19SummaryByMonth: any;
     covid19OverTime: any;
+    covid19ScreeningEnrolmentCascade: any;
 
     numberEnrolled: any;
     covid19ByAgeSex: any;
@@ -163,6 +165,40 @@ class OverviewRepository implements IOverviewRepository {
         });
 
         return this.covid19SummaryByMonth;
+    }
+
+    async retrieveCovid19ScreeningEnrollmentCascade(): Promise<Covid19EnrollmentScreeningCascade[]> {
+        const query =
+            `SELECT TotalScreened, Eligible, Enrolled, Tested, Positive
+            FROM (SELECT  
+            (SELECT COUNT(Screened) 
+            FROM [dbo].[FactMortality] p
+            WHERE Screened = 1 ) AS TotalScreened,
+            
+             --eligible
+            (SELECT Count(Eligible) Eligible FROM [dbo].[FactMortality] p
+            WHERE Eligible = 1) as Eligible,
+            
+            -- Enrolled  
+            (SELECT sum( SampleTested)  
+            FROM [dbo].[FactMortality] 
+            WHERE SampleTested = 1 and SampleTested is not null and barcode is not null ) AS Enrolled,
+        
+             -- Tested
+            (SELECT sum( SampleTested) 
+            FROM [dbo].[FactMortality] 
+            WHERE SampleTested = 1 and SampleTested is not null and barcode is not null ) AS Tested ,
+            
+            -- Positive
+            (SELECT sum(Covid19Positive) Positive      
+            FROM  [dbo].[FactMortality]  p
+            WHERE SampleTested = 1 and SampleTested is not null and barcode is not null ) AS Positive) A`
+
+        this.covid19ScreeningEnrolmentCascade = await this.db.sequelize?.query<Covid19EnrollmentScreeningCascade[]>(query, {
+            type: QueryTypes.SELECT,
+        });
+
+        return this.covid19ScreeningEnrolmentCascade;
     }
 
     async retrieveNumberEnrolledByFacility(): Promise<NumberEnrolled[]> {

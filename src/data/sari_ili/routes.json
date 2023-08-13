@@ -1,0 +1,54 @@
+{
+    "routes": [
+        {
+            "title": "SARI Influenza Cascade",
+            "url": "/findCascade",
+            "query": "SELECT [VariableId],[Ordinal],[Variable],[VariableValue],[VariableParentId] FROM [dbo].[CascadeHelper]"
+        },
+        {
+            "title": "Influenza Types Distribution",
+            "url": "/findTypesByDistribution",
+            "query": "DECLARE @InfluenzaAPositiveNumber INT, @InfluenzaBPositiveNumber INT, @InfluenzaABPositiveNumber INT; SELECT @InfluenzaAPositiveNumber = COUNT(PatientID) FROM [dbo].[FactSari] WHERE fluaPos = 1 AND flutest = 1; SELECT @InfluenzaBPositiveNumber = COUNT(PatientID) FROM [dbo].[FactSari] WHERE flubPos = 1 AND flutest = 1; SELECT @InfluenzaABPositiveNumber = COUNT(PatientID) FROM [dbo].[FactSari] WHERE flubPos = 1 AND fluApos = 1 AND flutest = 1; DECLARE @NegativeFlu INT; SELECT @NegativeFlu = (SELECT COUNT(PatientId) FROM [dbo].[FactSari] WHERE Enrolled = 1) - (SELECT COUNT(PatientID) FROM [dbo].[FactSari] WHERE flutest = 1); DECLARE @TotalCount INT; SET @TotalCount = @InfluenzaAPositiveNumber + @InfluenzaBPositiveNumber + @InfluenzaABPositiveNumber + @NegativeFlu; DECLARE @InfluenzaAPositivePercentage FLOAT, @InfluenzaBPositivePercentage FLOAT, @InfluenzaABPositivePercentage FLOAT; SET @InfluenzaAPositivePercentage = (@InfluenzaAPositiveNumber / CAST(@TotalCount AS FLOAT)) * 100; SET @InfluenzaBPositivePercentage = (@InfluenzaBPositiveNumber / CAST(@TotalCount AS FLOAT)) * 100; SET @InfluenzaABPositivePercentage = (@InfluenzaABPositiveNumber / CAST(@TotalCount AS FLOAT)) * 100; SELECT 'Influenza A Positive' AS Scenario, @InfluenzaAPositiveNumber AS Count, @InfluenzaAPositivePercentage AS Percentage UNION ALL SELECT 'Influenza B Positive' AS Scenario, @InfluenzaBPositiveNumber AS Count, @InfluenzaBPositivePercentage AS Percentage UNION ALL SELECT 'Influenza AB Positive' AS Scenario, @InfluenzaABPositiveNumber AS Count, @InfluenzaABPositivePercentage AS Percentage UNION ALL SELECT 'Negative for Flu and COVID-19' AS Scenario, @NegativeFlu AS Count, ((@NegativeFlu / CAST(@TotalCount AS FLOAT)) * 100) AS Percentage;"
+        },
+        {
+            "title": "Influenza Subtypes Distribution",
+            "url": "/findSubtypesDistribution",
+            "query": ""
+        },
+        {
+            "title": "Overall SARS-COV-2 Positivity",
+            "url": "/findSARSCOV2Positivity",
+            "query": ""
+        },
+        {
+            "title": "SARS-COV-2 Positivity over time",
+            "url": "/findSARSCOV2PositivityOvertime",
+            "query": ""
+        },
+        {
+            "title": "SARI/ILI Flu Type Epi Weekly Trends",
+            "url": "/findTypesPositivityTrends",
+            "query": ""
+        },
+        {
+            "title": "SARI/ILI Flu Subtype Epi Weekly Trends",
+            "url": "/findSubtypesPositivityTrends",
+            "query": ""
+        },
+        {
+            "title": "Weekly number of hospitalized SARI patients and percent SARI specimens testing positive for influenza",
+            "url": "/findHospitalizedTrend",
+            "query": ""
+        },
+        {
+            "title": "Patient Outcome",
+            "url": "/findPatientOutcome",
+            "query": ""
+        },
+        {
+            "title": "Influence Geographic Distribution by Health Facility",
+            "url": "/findDistributionByFacility",
+            "query": ""
+        }
+    ]
+}

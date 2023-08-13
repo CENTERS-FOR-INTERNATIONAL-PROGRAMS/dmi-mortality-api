@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import OverviewController from '../../controllers/afi/overview.controller';
-import * as RoutesData from '../../data/afi/routes.json';
+import OverviewController from '../../controllers/sari_ili/overview.controller';
+import * as RoutesData from '../../data/sari_ili/routes.json';
 
 class OverviewRoutes {
     router = Router();

@@ -1,13 +1,13 @@
 import { QueryTypes } from "sequelize";
 import Database from "../../db/database";
-import * as RoutesData from '../../data/afi/routes.json';
-import { config } from "../../config/db.config";
+import * as RoutesData from '../../data/sari_ili/routes.json';
+import { config, dialect } from "../../config/db.config";
 
-interface IOverviewRepository {
+interface IEnrolmentRepository {
     readData(url: string): Promise<any[]>;
 }
 
-class OverviewRepository implements IOverviewRepository {
+class EnrolmentRepository implements IEnrolmentRepository {
     db = new Database(config.DB_SARI);
     private retrievedData: any;
 
@@ -36,4 +36,4 @@ class OverviewRepository implements IOverviewRepository {
     }
 }
 
-export default new OverviewRepository
+export default new EnrolmentRepository

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import overviewRepository from "../../repositories/afi/overview.repository";
+import overviewRepository from "../../repositories/sari_ili/overview.repository";
 
 export default class OverviewController {
     async getData(req: Request, res: Response) {

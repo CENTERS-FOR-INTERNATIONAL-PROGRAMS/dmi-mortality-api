@@ -1,6 +1,6 @@
 import { QueryTypes } from "sequelize";
 import Database from "../../db/database";
-import * as RoutesData from '../../data/afi/routes.json';
+import * as RoutesData from '../../data/sari_ili/routes.json';
 import { config } from "../../config/db.config";
 
 interface IOverviewRepository {

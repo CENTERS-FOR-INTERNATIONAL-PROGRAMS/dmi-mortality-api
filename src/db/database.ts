@@ -4,13 +4,13 @@ import { config, dialect } from "../config/db.config";
 class Database {
   public sequelize: Sequelize | undefined;
 
-  constructor() {
-    this.connectToDatabase();
+  constructor(database: string) {
+    this.connectToDatabase(database);
   }
 
-  private async connectToDatabase() {
+  private async connectToDatabase(database: string) {
     this.sequelize = new Sequelize({
-      database: config.DB,
+      database: database,
       username: config.USER,
       password: config.PASSWORD,
       host: config.HOST,

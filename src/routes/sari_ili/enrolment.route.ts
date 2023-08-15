@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import OverviewController from '../../controllers/afi/overview.controller';
-import * as RoutesData from '../../data/afi/routes.json';
+import EnrolmentController from '../../controllers/sari_ili/enrolment.controller';
+import * as RoutesData from '../../data/sari_ili/routes.json';
 
-class OverviewRoutes {
+class EnrolmentRoutes {
     router = Router();
-    controller = new OverviewController();
+    controller = new EnrolmentController();
 
     constructor() {
         this.intializeRoutes();
@@ -17,4 +17,4 @@ class OverviewRoutes {
     }
 }
 
-export default new OverviewRoutes().router;
+export default new EnrolmentRoutes().router;

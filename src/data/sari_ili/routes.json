@@ -33,7 +33,7 @@
         {
             "title": "Influenza strains overtime",
             "url": "/findInfluenzaStrainsOvertime",
-            "query": "SELECT Count(CASE when notsubtyp = 1 and flutest = 1 then notsubtyp END) [NotSubTypeNumber], Count(CASE when ph1n1 = 1 and flutest = 1 then notsubtyp END) [AH1N1Number], Count(CASE when h3n2 = 1 and flutest = 1 then notsubtyp END) [AH3N2Number], Count(CASE when unsub_non = 1 and flutest = 1 then notsubtyp END) [NonSubTypableNumber], COUNT(CASE WHEN yamagata = 1 and flutest = 1 THEN yamagata END) YamagataNumber, COUNT(CASE WHEN victoria = 1 and flutest = 1 THEN victoria END) VictoriaNumber, COUNT(CASE WHEN FlubUndetermined = 1 and flutest =1 THEN FlubUndetermined END) NotdeterminedNumber , Count(CASE when flutest = 0 then flutest END) [InfluenzaNeg], EpiWeek FROM [dbo].[FactSari] Group by EpiWeek"
+            "query": "SELECT Count(CASE when notsubtyp = 1 and flutest = 1 then notsubtyp END) [NotSubTypeNumber], Count(CASE when ph1n1 = 1 and flutest = 1 then notsubtyp END) [AH1N1Number], Count(CASE when h3n2 = 1 and flutest = 1 then notsubtyp END) [AH3N2Number], Count(CASE when unsub_non = 1 and flutest = 1 then notsubtyp END) [NonSubTypableNumber], COUNT(CASE WHEN yamagata = 1 and flutest = 1 THEN yamagata END) YamagataNumber, COUNT(CASE WHEN victoria = 1 and flutest = 1 THEN victoria END) VictoriaNumber, COUNT(CASE WHEN FlubUndetermined = 1 and flutest =1 THEN FlubUndetermined END) NotdeterminedNumber , Count(CASE when flutest = 0 then flutest END) [InfluenzaNeg], EpiWeek FROM [dbo].[FactSari] Group by EpiWeek ORDER BY EpiWeek"
         }
     ]
 }

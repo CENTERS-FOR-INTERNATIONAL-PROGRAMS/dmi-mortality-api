@@ -31,6 +31,11 @@
             "query": "SELECT COUNT(CASE WHEN CovidTEST = 1 THEN CovidTEst END ) Covid19Tested, COUNT (CASE WHEN CovidPos = 1 THEN CovidPos END ) Covid19Positive, CAST((COUNT (CASE WHEN CovidPos = 1 THEN CovidPos END ) * 100.0 / COUNT(CASE WHEN CovidTEST = 1 THEN CovidTEst END )) AS decimal (18,0)) AS Covid19PositivePercent, EPIWeek FROM [dbo].[FactSari] P WHERE CovidTest = 1 GROUP BY EpiWeek"
         },
         {
+            "title": "Number positive for influenza by type and epiweek",
+            "url": "/findInfluenzaPositivityByTypeOvertime",
+            "query": "SELECT InfluenzaAPositive as InfluenzaAPositiveNumber, InfluenzaBPositive as InfluenzaBPositiveNumber, TotalTestsDone as SampleTestedNumber, ((InfluenzaAPositive + InfluenzaBPositive) * 100/( TotalTestsDone)) InfluenzaPositivePercentage, (TotalTestsDone) - (InfluenzaAPositive + InfluenzaBPositive) InfluenzaNegativeNumber, EpiWeek FROM( SELECT COUNT(CASE when fluaPos = 1 then fluapos end) InfluenzaAPositive, COUNT(CASE when flubpos = 1 then flubpos end) InfluenzaBPositive, COUNT(CASE WHEN flutest = 1 then flutest end) TotalTestsDone, EpiWeek FROM [dbo].[FactSari] Group by EpiWeek ) A ORDER BY EpiWeek"
+        },
+        {
             "title": "Influenza strains overtime",
             "url": "/findInfluenzaStrainsOvertime",
             "query": "SELECT Count(CASE when notsubtyp = 1 and flutest = 1 then notsubtyp END) [NotSubTypeNumber], Count(CASE when ph1n1 = 1 and flutest = 1 then notsubtyp END) [AH1N1Number], Count(CASE when h3n2 = 1 and flutest = 1 then notsubtyp END) [AH3N2Number], Count(CASE when unsub_non = 1 and flutest = 1 then notsubtyp END) [NonSubTypableNumber], COUNT(CASE WHEN yamagata = 1 and flutest = 1 THEN yamagata END) YamagataNumber, COUNT(CASE WHEN victoria = 1 and flutest = 1 THEN victoria END) VictoriaNumber, COUNT(CASE WHEN FlubUndetermined = 1 and flutest =1 THEN FlubUndetermined END) NotdeterminedNumber , Count(CASE when flutest = 0 then flutest END) [InfluenzaNeg], EpiWeek FROM [dbo].[FactSari] Group by EpiWeek ORDER BY EpiWeek"

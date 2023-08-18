@@ -1,7 +1,7 @@
 name: Deploy Integrated dashboard API
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
 jobs:
 
   build:

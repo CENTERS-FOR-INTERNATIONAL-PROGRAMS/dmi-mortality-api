@@ -27,7 +27,7 @@ jobs:
           sudo npm install
           sudo npm run build
           cd /var/lib/API/dmi-mortality-api
-          cp -rf /var/lib/API/dmi-mortality-api/* /tmp/dmi-integrated-dashboards-api-backup/
+          sudo cp -rf /var/lib/API/dmi-mortality-api/* /tmp/dmi-integrated-dashboards-api-backup/
           sudo cp -rf /var/lib/github_workflows/dmi-mortality-api/* .
           sudo pm2 reload integrated-dashboards-api
           echo "Deployment of API successful! API is upto date!"

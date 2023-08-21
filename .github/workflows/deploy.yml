@@ -16,14 +16,18 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /var/lib/API/dmi-mortality-api
+          cd /var/lib/github_workflows/dmi-mortality-api
           sudo pm2 stop integrated-dashboards-api
           sudo git switch dev
           sudo rm -rf build
+          sudo git stash
           sudo git pull
           sudo mkdir src/config
           sudo cp -rf /var/lib/API/config/* src/config/
           sudo npm install
           sudo npm run build
+          cd /var/lib/API/dmi-mortality-api
+          cp -rf /var/lib/API/dmi-mortality-api/* /tmp/dmi-integrated-dashboards-api-backup/
+          sudo cp -rf /var/lib/github_workflows/dmi-mortality-api/* .
           sudo pm2 reload integrated-dashboards-api
           echo "Deployment of API successful! API is upto date!"

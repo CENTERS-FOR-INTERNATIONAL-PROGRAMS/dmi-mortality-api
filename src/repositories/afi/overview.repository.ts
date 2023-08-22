@@ -8,7 +8,7 @@ interface IOverviewRepository {
 }
 
 class OverviewRepository implements IOverviewRepository {
-    db = new Database(config.DB_SARI);
+    db = new Database(config.DB_AFI);
     private retrievedData: any;
 
     async readData(url: string): Promise<any[]> {

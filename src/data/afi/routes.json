@@ -1,9 +1,19 @@
 {
     "routes": [
         {
-            "title": "AFI Cascade",
-            "url": "/findCascade",
-            "query": ""
+            "title": "AFI cascade",
+            "url": "/AFICascade",
+            "query": "SELECT ScreenedNumber, EligibleNumber, EnrolledNumber, SampledNumber, ((EligibleNumber) * 100/( ScreenedNumber)) EligiblePercentage, ((EnrolledNumber) * 100/( EligibleNumber)) EnrolledPercentage, ((SampledNumber) * 100/( EnrolledNumber)) SampledPercentage FROM ( SELECT COUNT(PID) ScreenedNumber, (SELECT Count(PId) FROM [dbo].[FactScreening] WHERE Eligible = 1 )EligibleNumber, ( SELECT Count(PID) FROM [dbo].[FactEnrollAndHouseholdInfo]) EnrolledNumber, (SELECT Count(DISTINCT(PID)) FROM [dbo].[FactSampleCollection] WHERE Barcode != '0' and PID !='') SampledNumber FROM [dbo].[FactScreening] ) A"
+        },
+        {
+            "title": "AFI Enrolled by gender",
+            "url": "/enrolledByGender",
+            "query": "SELECT TotalEnrolledNumber, MaleEnrolledNumber , FemaleEnrolledNumber , CAST(round(((MaleEnrolledNumber*100.0)/TotalEnrolledNumber),2) as decimal(5,2))MaleEnrolledPercentage, CAST(round(((FemaleEnrolledNumber*100.0)/TotalEnrolledNumber),2) as decimal(5,2))FemaleEnrolledPercentage FROM ( SELECT COUNT(PID) TotalEnrolledNumber, COUNT(CASE WHEN Gender = '1.0' then Gender end ) MaleEnrolledNumber, COUNT(CASE WHEN Gender = '2.0' then Gender end ) FemaleEnrolledNumber FROM FactEnrollAndHouseholdInfo ) A"
+        },
+        {
+            "title": "AFI enrolled by age group and gender",
+            "url": "/enrolledByAgeGender",
+            "query": "SELECT AgeGroup, Gender, COUNT(PID) EnrolledNumber FROM( SELECT Pid, CASE Gender when '1.0' THEN 'Male' When '2.0' THEN 'Female' END Gender , CASE WHEN CAST(Ageyrs AS decimal) BETWEEN 0 and 4 THEN '0-4Yrs' WHEN CAST(Ageyrs AS decimal) BETWEEN 5 and 14 THEN '5-14Yrs' WHEN CAST(Ageyrs AS decimal) BETWEEN 15 and 34 THEN '15-34Yrs' WHEN CAST(Ageyrs AS decimal) BETWEEN 35 and 64 THEN '35-64Yrs' WHEN CAST(Ageyrs AS decimal) BETWEEN 65 and 84 THEN '65-84Yrs' WHEN CAST(Ageyrs AS decimal) BETWEEN 85 and 105 THEN '85+' END AgeGroup FROM FactEnrollAndHouseholdInfo WHERE Gender = '1.0' OR Gender ='2.0' ) A Where AgeGroup is not null Group by AgeGroup, Gender"
         }
     ]
 }

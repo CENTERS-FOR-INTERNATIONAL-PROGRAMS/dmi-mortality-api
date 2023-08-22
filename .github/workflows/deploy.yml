@@ -17,6 +17,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /var/lib/github_workflows/dmi-mortality-api
+          sudo pm2 reload integrated-dashboards-api
           sudo git switch dev
           sudo rm -rf build
           sudo git stash

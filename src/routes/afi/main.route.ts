@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import OverviewController from '../../controllers/afi/overview.controller';
+import MainController from '../../controllers/afi/main.controller';
 import * as RoutesData from '../../data/afi/routes.json';
 
-class OverviewRoutes {
+class MainRoutes {
     router = Router();
-    controller = new OverviewController();
+    controller = new MainController();
 
     constructor() {
         this.intializeRoutes();
@@ -17,4 +17,4 @@ class OverviewRoutes {
     }
 }
 
-export default new OverviewRoutes().router;
+export default new MainRoutes().router;

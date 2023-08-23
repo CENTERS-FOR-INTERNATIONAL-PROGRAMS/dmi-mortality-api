@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import EnrolmentController from '../../controllers/sari_ili/enrolment.controller';
-import * as RoutesData from '../../data/sari_ili/routes.json';
+import MainController from '../../controllers/mortality_ncov/main.controller';
+import * as RoutesData from '../../data/mortality_ncov/routes.json';
 
-class EnrolmentRoutes {
+class MainRoutes {
     router = Router();
-    controller = new EnrolmentController();
+    controller = new MainController();
 
     constructor() {
         this.intializeRoutes();
@@ -17,4 +17,4 @@ class EnrolmentRoutes {
     }
 }
 
-export default new EnrolmentRoutes().router;
+export default new MainRoutes().router;

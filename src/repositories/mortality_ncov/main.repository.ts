@@ -1,14 +1,14 @@
 import { QueryTypes } from "sequelize";
 import Database from "../../db/database";
-import * as RoutesData from '../../data/sari_ili/routes.json';
-import { config, dialect } from "../../config/db.config";
+import * as RoutesData from '../../data/mortality_ncov/routes.json';
+import { config } from "../../config/db.config";
 
-interface IEnrolmentRepository {
+interface IMainRepository {
     readData(url: string): Promise<any[]>;
 }
 
-class EnrolmentRepository implements IEnrolmentRepository {
-    db = new Database(config.DB_SARI);
+class MainRepository implements IMainRepository {
+    db = new Database(config.DB);
     private retrievedData: any;
 
     async readData(url: string): Promise<any[]> {
@@ -36,4 +36,4 @@ class EnrolmentRepository implements IEnrolmentRepository {
     }
 }
 
-export default new EnrolmentRepository
+export default new MainRepository

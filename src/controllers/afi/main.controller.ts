@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import enrolmentRepository from "../../repositories/sari_ili/enrolment.repository";
+import mainRepository from "../../repositories/afi/main.repository";
 
-export default class EnrolmentController {
+export default class MainController {
     async getData(req: Request, res: Response) {
         try {
             let dataInstance: any;
-            dataInstance = await enrolmentRepository.readData(req.url);
+            dataInstance = await mainRepository.readData(req.url);
             res.status(200).send(dataInstance);
         }
         catch (err) {
